@@ -1,13 +1,13 @@
 export const SLEEP_CYCLE_MINUTES = 90;
-export const SLEEP_ONSET_MINUTES = 15;
 
 /**
  * Calculates suggested wake-up times if the user goes to sleep now.
  * @param now The current time
+ * @param sleepOnsetMinutes Time to fall asleep
  * @returns An array of Date objects representing optimal wake-up times
  */
-export function calculateWakeUpTimes(now: Date): Date[] {
-  const sleepStartTime = new Date(now.getTime() + SLEEP_ONSET_MINUTES * 60000);
+export function calculateWakeUpTimes(now: Date, sleepOnsetMinutes: number): Date[] {
+  const sleepStartTime = new Date(now.getTime() + sleepOnsetMinutes * 60000);
   const suggestions: Date[] = [];
 
   // Provide suggestions for 3 to 6 sleep cycles
@@ -21,10 +21,11 @@ export function calculateWakeUpTimes(now: Date): Date[] {
 
 /**
  * Calculates suggested bedtimes for a given target wake-up time.
- * @param wakeUpTime A string in "HH:mm" format
+ * @param wakeUpTimeStr A string in "HH:mm" format
+ * @param sleepOnsetMinutes Time to fall asleep
  * @returns An array of Date objects representing optimal bedtimes
  */
-export function calculateBedtimes(wakeUpTimeStr: string): Date[] {
+export function calculateBedtimes(wakeUpTimeStr: string, sleepOnsetMinutes: number): Date[] {
   const [hours, minutes] = wakeUpTimeStr.split(':').map(Number);
   const now = new Date();
   
@@ -38,8 +39,8 @@ export function calculateBedtimes(wakeUpTimeStr: string): Date[] {
 
   // Provide suggestions for 3 to 6 sleep cycles before the wake-up time
   for (let i = 3; i <= 6; i++) {
-    // Total time to subtract: i cycles * 90 mins + 15 mins to fall asleep
-    const totalMinutesToSubtract = i * SLEEP_CYCLE_MINUTES + SLEEP_ONSET_MINUTES;
+    // Total time to subtract: i cycles * 90 mins + X mins to fall asleep
+    const totalMinutesToSubtract = i * SLEEP_CYCLE_MINUTES + sleepOnsetMinutes;
     const bedtime = new Date(wakeUpDate.getTime() - totalMinutesToSubtract * 60000);
     suggestions.push(bedtime);
   }
