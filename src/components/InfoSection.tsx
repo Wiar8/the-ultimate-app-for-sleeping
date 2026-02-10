@@ -42,7 +42,7 @@ const cardVariants = {
 export function InfoSection() {
   return (
     <section
-      id="how-it-works"
+      id="science"
       className="flex flex-col items-center gap-12 px-6 py-16 md:px-16 w-full"
     >
       <motion.div 
