@@ -13,7 +13,7 @@ export function Footer() {
           <div className="flex items-center gap-2.5">
             <Moon className="w-5 h-5 text-(--sc-primary)" />
             <span className="font-['Playfair_Display'] text-lg font-semibold italic text-[#E8E6F0]">
-              SleepCycle
+              UAS
             </span>
           </div>
           <p className="text-sm text-(--sc-text-muted)">Sleep smarter. Wake refreshed.</p>
@@ -51,7 +51,7 @@ export function Footer() {
       {/* Bottom */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-5 border-t border-(--sc-border) w-full">
         <span className="text-xs text-(--sc-text-muted)">
-          &copy; {new Date().getFullYear()} SleepCycle. All rights reserved.
+          &copy; {new Date().getFullYear()} UAS. All rights reserved.
         </span>
         {/* <div className="flex gap-6">
           <a href="#" className="text-xs text-(--sc-text-muted) hover:text-(--sc-text-secondary) transition-colors">Terms</a>

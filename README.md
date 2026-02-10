@@ -1,4 +1,4 @@
-# 🌙 The Ultimate App for Sleeping
+# 🌙 UAS — The Ultimate App for Sleeping
 
 A sleek, modern, and high-performance sleep cycle calculator designed to help you wake up feeling refreshed. By calculating optimal 90-minute sleep cycles, this app helps you bridge the gap between "just sleeping" and "waking up revitalized."
 

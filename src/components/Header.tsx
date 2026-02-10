@@ -6,7 +6,7 @@ export function Header() {
       <div className="flex items-center gap-2.5">
         <Moon className="w-6 h-6 text-(--sc-primary)" />
         <span className="font-['Playfair_Display'] text-xl font-semibold italic text-(--sc-text)">
-          SleepCycle
+          UAS
         </span>
       </div>
       <nav className="hidden md:flex items-center gap-8">
