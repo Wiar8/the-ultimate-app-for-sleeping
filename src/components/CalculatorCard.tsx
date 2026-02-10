@@ -1,6 +1,7 @@
 import { Sunrise, MoonStar, Calculator, Timer, Pencil } from 'lucide-react';
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useI18n } from '../i18n';
 
 type Mode = 'wake-up' | 'sleep-now';
 
@@ -17,6 +18,7 @@ export function CalculatorCard({
   onCalculateSleepNow,
   onSleepOnsetChange,
 }: CalculatorCardProps) {
+  const { t } = useI18n();
   const [activeTab, setActiveTab] = useState<Mode>('wake-up');
   const [hour, setHour] = useState(7);
   const [minute, setMinute] = useState(0);
@@ -84,7 +86,7 @@ export function CalculatorCard({
             }`}
           >
             <Sunrise className="w-4 h-4" />
-            Wake Up At
+            {t.calculator.wakeUpAt}
             {activeTab === 'wake-up' && (
               <motion.div
                 layoutId="activeTab"
@@ -102,7 +104,7 @@ export function CalculatorCard({
             }`}
           >
             <MoonStar className="w-4 h-4" />
-            Sleep Now
+            {t.calculator.sleepNow}
             {activeTab === 'sleep-now' && (
               <motion.div
                 layoutId="activeTab"
@@ -126,7 +128,7 @@ export function CalculatorCard({
             {/* Time input (only for wake-up mode) */}
             {activeTab === 'wake-up' && (
               <div className="flex flex-col items-center gap-3 w-full">
-                <span className="text-sm text-(--sc-text-secondary)">I want to wake up at</span>
+                <span className="text-sm text-(--sc-text-secondary)">{t.calculator.wantToWakeUpAt}</span>
                 <div className="flex items-center gap-3">
                   {/* Hour */}
                   <button
@@ -175,7 +177,7 @@ export function CalculatorCard({
             {activeTab === 'sleep-now' && (
               <div className="flex flex-col gap-3 w-full">
                 <p className="text-sm text-(--sc-text-secondary)">
-                  Going to bed now? We'll calculate the best times to set your alarm.
+                  {t.calculator.sleepNowDescription}
                 </p>
               </div>
             )}
@@ -186,7 +188,7 @@ export function CalculatorCard({
               className="flex items-center justify-center gap-2.5 w-full py-4 rounded-2xl bg-(--sc-primary) text-white font-semibold transition-all hover:brightness-110 active:scale-[0.98] cursor-pointer shadow-lg shadow-indigo-500/10"
             >
               <Calculator className="w-5 h-5" />
-              {activeTab === 'wake-up' ? 'Calculate Sleep Times' : 'Calculate Wake Times'}
+              {activeTab === 'wake-up' ? t.calculator.calculateSleepTimes : t.calculator.calculateWakeTimes}
             </button>
           </motion.div>
         </AnimatePresence>
@@ -194,7 +196,7 @@ export function CalculatorCard({
         {/* Sleep onset setting */}
         <div className="flex items-center justify-center gap-2 w-full pt-2">
           <Timer className="w-3.5 h-3.5 text-(--sc-text-muted)" />
-          <span className="text-sm text-(--sc-text-muted)">Time to fall asleep:</span>
+          <span className="text-sm text-(--sc-text-muted)">{t.calculator.timeToFallAsleep}</span>
           {editingOnset ? (
             <input
               type="number"
@@ -208,7 +210,7 @@ export function CalculatorCard({
               className="w-14 text-center text-sm font-semibold text-(--sc-primary) bg-(--sc-input-bg) border border-(--sc-border) rounded-lg px-1 py-0.5 focus:outline-none focus:border-(--sc-primary)"
             />
           ) : (
-            <span className="text-sm font-semibold text-(--sc-primary)">{sleepOnset} min</span>
+            <span className="text-sm font-semibold text-(--sc-primary)">{sleepOnset} {t.calculator.min}</span>
           )}
           <button
             onClick={() => setEditingOnset(true)}

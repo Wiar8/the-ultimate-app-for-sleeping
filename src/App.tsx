@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { calculateWakeUpTimes, calculateBedtimes } from './utils/sleepLogic';
+import { I18nProvider } from './i18n';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { CalculatorCard } from './components/CalculatorCard';
@@ -8,7 +9,7 @@ import { InfoSection } from './components/InfoSection';
 import { Footer } from './components/Footer';
 import { Background } from './components/Background';
 
-function App() {
+function AppContent() {
   const [results, setResults] = useState<Date[]>([]);
   const [mode, setMode] = useState<'none' | 'sleep-now' | 'wake-up'>('none');
   const [targetWakeUpDisplay, setTargetWakeUpDisplay] = useState('');
@@ -71,6 +72,14 @@ function App() {
         <Footer />
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <I18nProvider>
+      <AppContent />
+    </I18nProvider>
   );
 }
 

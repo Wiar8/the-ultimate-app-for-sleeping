@@ -1,6 +1,8 @@
 import { Moon, Github, Twitter, Linkedin, Instagram } from 'lucide-react';
+import { useI18n } from '../i18n';
 
 export function Footer() {
+  const { t } = useI18n();
   return (
     <footer className="flex flex-col gap-10 px-6 py-12 md:px-16 w-full ">
       {/* Divider */}
@@ -51,7 +53,7 @@ export function Footer() {
       {/* Bottom */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-5 border-t border-(--sc-border) w-full">
         <span className="text-xs text-(--sc-text-muted)">
-          &copy; {new Date().getFullYear()} UAS. All rights reserved.
+          {t.footer.copyright}
         </span>
         {/* <div className="flex gap-6">
           <a href="#" className="text-xs text-(--sc-text-muted) hover:text-(--sc-text-secondary) transition-colors">Terms</a>

@@ -1,4 +1,5 @@
 import { motion } from 'motion/react';
+import { useI18n } from '../i18n';
 
 interface CycleCardProps {
   time: string;
@@ -6,11 +7,16 @@ interface CycleCardProps {
   isRecommended: boolean;
 }
 
-const CYCLE_META: Record<number, { label: string; labelColor: string; barColor: string; timeColor: string; barWidth: string }> = {
-  6: { label: 'Recommended', labelColor: 'text-white', barColor: 'bg-[var(--sc-primary)]', timeColor: 'text-[var(--sc-text)]', barWidth: 'w-full' },
-  5: { label: 'Great', labelColor: 'text-[var(--sc-primary-light)]', barColor: 'bg-[var(--sc-primary)]', timeColor: 'text-[var(--sc-text)]', barWidth: 'w-[83%]' },
-  4: { label: 'Good', labelColor: 'text-[var(--sc-text-secondary)]', barColor: 'bg-[var(--sc-primary)]', timeColor: 'text-[var(--sc-text)]', barWidth: 'w-[66%]' },
-  3: { label: 'Minimum', labelColor: 'text-[var(--sc-text-muted)]', barColor: 'bg-[var(--sc-text-muted)]', timeColor: 'text-[var(--sc-text-secondary)]', barWidth: 'w-[50%]' },
+const CYCLE_STYLES: Record<number, { labelColor: string; barColor: string; timeColor: string; barWidth: string }> = {
+  6: { labelColor: 'text-white', barColor: 'bg-[var(--sc-primary)]', timeColor: 'text-[var(--sc-text)]', barWidth: 'w-full' },
+  5: { labelColor: 'text-[var(--sc-primary-light)]', barColor: 'bg-[var(--sc-primary)]', timeColor: 'text-[var(--sc-text)]', barWidth: 'w-[83%]' },
+  4: { labelColor: 'text-[var(--sc-text-secondary)]', barColor: 'bg-[var(--sc-primary)]', timeColor: 'text-[var(--sc-text)]', barWidth: 'w-[66%]' },
+  3: { labelColor: 'text-[var(--sc-text-muted)]', barColor: 'bg-[var(--sc-text-muted)]', timeColor: 'text-[var(--sc-text-secondary)]', barWidth: 'w-[50%]' },
+};
+
+const getLabelKey = (cycles: number): string => {
+  const labels: Record<number, string> = { 6: 'recommended', 5: 'great', 4: 'good', 3: 'minimum' };
+  return labels[cycles] || 'good';
 };
 
 const itemVariants = {
@@ -24,10 +30,18 @@ const itemVariants = {
 };
 
 export function CycleCard({ time, cycles, isRecommended }: CycleCardProps) {
-  const meta = CYCLE_META[cycles] ?? CYCLE_META[4];
+  const { t, lang } = useI18n();
+  const styles = CYCLE_STYLES[cycles] ?? CYCLE_STYLES[4];
   const totalMinutes = cycles * 90;
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
+
+  // Labels are not in translations for simplicity - keeping English
+  const labels: Record<string, Record<string, string>> = {
+    en: { recommended: 'Recommended', great: 'Great', good: 'Good', minimum: 'Minimum' },
+    es: { recommended: 'Recomendado', great: 'Excelente', good: 'Bueno', minimum: 'Mínimo' },
+  };
+  const label = labels[lang][getLabelKey(cycles)];
 
   return (
     <motion.div
@@ -40,33 +54,33 @@ export function CycleCard({ time, cycles, isRecommended }: CycleCardProps) {
     >
       {/* Badge */}
       <div
-        className={`px-2.5 py-1 rounded-full text-xs font-semibold ${meta.labelColor} ${
+        className={`px-2.5 py-1 rounded-full text-xs font-semibold ${styles.labelColor} ${
           isRecommended
             ? 'bg-(--sc-primary)'
             : 'bg-(--sc-surface-dark) border border-(--sc-border)]'
         }`}
       >
-        {meta.label}
+        {label}
       </div>
 
       {/* Time */}
-      <span className={`font-['Playfair_Display'] text-3xl font-bold italic text-center ${meta.timeColor}`}>
+      <span className={`font-['Playfair_Display'] text-3xl font-bold italic text-center ${styles.timeColor}`}>
         {time}
       </span>
 
       {/* Info */}
       <div className="flex flex-col items-center gap-1">
         <span className="text-xs font-medium text-(--sc-primary-light)">
-          {cycles} cycles
+          {cycles} {t.results.cycles}
         </span>
         <span className="text-xs text-(--sc-text-secondary)">
-          {hours}h {minutes}m sleep
+          {hours}h {minutes}m
         </span>
       </div>
 
       {/* Progress bar */}
       <div className="w-full h-1 rounded-full bg-(--sc-input-bg)">
-        <div className={`h-full rounded-full ${meta.barColor} ${meta.barWidth}`} />
+        <div className={`h-full rounded-full ${styles.barColor} ${styles.barWidth}`} />
       </div>
     </motion.div>
   );

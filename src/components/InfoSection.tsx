@@ -1,23 +1,6 @@
 import { Timer, Brain, Bed } from 'lucide-react';
 import { motion } from 'motion/react';
-
-const INFO_CARDS = [
-  {
-    icon: Timer,
-    title: '90-Minute Cycles',
-    description: 'Each sleep cycle lasts approximately 90 minutes, moving through light sleep, deep sleep, and REM stages.',
-  },
-  {
-    icon: Brain,
-    title: 'Wake Between Cycles',
-    description: 'Waking at the end of a cycle means lighter sleep, so you feel alert and refreshed instead of groggy.',
-  },
-  {
-    icon: Bed,
-    title: 'Fall Asleep Buffer',
-    description: 'We account for the average 15 minutes it takes to fall asleep, so your calculated times are accurate.',
-  },
-];
+import { useI18n } from '../i18n';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -40,6 +23,26 @@ const cardVariants = {
 };
 
 export function InfoSection() {
+  const { t } = useI18n();
+
+  const INFO_CARDS = [
+    {
+      icon: Timer,
+      title: t.info.card1.title,
+      description: t.info.card1.description,
+    },
+    {
+      icon: Brain,
+      title: t.info.card2.title,
+      description: t.info.card2.description,
+    },
+    {
+      icon: Bed,
+      title: t.info.card3.title,
+      description: t.info.card3.description,
+    },
+  ];
+
   return (
     <section
       id="science"
@@ -53,10 +56,10 @@ export function InfoSection() {
         className="flex flex-col items-center gap-2"
       >
         <h2 className="font-['Playfair_Display'] text-2xl md:text-3xl font-semibold italic text-center text-(--sc-text)">
-          The Science of Sleep Cycles
+          {t.info.title}
         </h2>
         <p className="text-base text-(--sc-text-secondary) text-center">
-          Understanding how your body rests to optimize your mornings
+          {t.info.subtitle}
         </p>
       </motion.div>
 

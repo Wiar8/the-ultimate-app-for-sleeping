@@ -1,4 +1,5 @@
 import { motion } from 'motion/react';
+import { useI18n } from '../i18n';
 import { CycleCard } from './CycleCard';
 import { formatTime } from '../utils/sleepLogic';
 
@@ -19,6 +20,8 @@ const containerVariants = {
 };
 
 export function ResultsSection({ mode, times, targetWakeUpTime }: ResultsSectionProps) {
+  const { t } = useI18n();
+
   // For wake-up mode, times come in [6-cycle, 5-cycle, 4-cycle, 3-cycle] order
   // For sleep-now mode, times come in [3-cycle, 4-cycle, 5-cycle, 6-cycle] order
   const cards = mode === 'wake-up'
@@ -26,12 +29,12 @@ export function ResultsSection({ mode, times, targetWakeUpTime }: ResultsSection
     : [...times].reverse().map((t, i) => ({ time: t, cycles: 6 - i }));
 
   const title = mode === 'wake-up'
-    ? 'Your Optimal Bedtimes'
-    : 'Your Optimal Wake Times';
+    ? t.results.optimalBedtimes
+    : t.results.optimalWakeTimes;
 
-  const subtitle = mode === 'wake-up'
-    ? `Go to bed at one of these times to wake up at ${targetWakeUpTime} feeling refreshed`
-    : 'Set your alarm for one of these times to wake up feeling refreshed';
+  const subtitle = mode === 'wake-up' && targetWakeUpTime
+    ? t.results.wakeUpSubtitle(targetWakeUpTime)
+    : t.results.sleepNowSubtitle;
 
   return (
     <section className="flex flex-col items-center gap-8 px-6 py-12 md:px-16 w-full relative">
