@@ -2,7 +2,7 @@ import { Moon, Github, Twitter, Linkedin, Instagram } from 'lucide-react';
 
 export function Footer() {
   return (
-    <footer className="flex flex-col gap-10 px-6 py-12 md:px-16 w-full bg-[rgba(8,7,21,0.56)]">
+    <footer className="flex flex-col gap-10 px-6 py-12 md:px-16 w-full ">
       {/* Divider */}
       <div className="w-full h-px bg-(--sc-border)" />
 

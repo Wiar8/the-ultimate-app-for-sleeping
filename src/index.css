@@ -17,7 +17,6 @@
 
   body {
     font-family: 'Inter', sans-serif;
-    background-color: var(--sc-bg);
     color: var(--sc-text);
   }
 }

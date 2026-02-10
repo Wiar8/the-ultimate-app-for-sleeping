@@ -6,6 +6,7 @@ import { CalculatorCard } from './components/CalculatorCard';
 import { ResultsSection } from './components/ResultsSection';
 import { InfoSection } from './components/InfoSection';
 import { Footer } from './components/Footer';
+import { Background } from './components/Background';
 
 function App() {
   const [results, setResults] = useState<Date[]>([]);
@@ -39,8 +40,9 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-(--sc-bg) text-(--sc-text) flex flex-col items-center">
-      <div className="w-full max-w-7xl flex flex-col">
+    <div className="min-h-screen text-(--sc-text) flex flex-col items-center selection:bg-(--sc-primary)/30">
+      <Background />
+      <div className="w-full max-w-7xl flex flex-col relative z-10">
         <Header />
         <HeroSection />
 

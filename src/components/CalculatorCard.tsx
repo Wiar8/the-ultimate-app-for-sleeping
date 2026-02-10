@@ -1,5 +1,6 @@
 import { Sunrise, MoonStar, Calculator, Timer, Pencil } from 'lucide-react';
 import { useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 
 type Mode = 'wake-up' | 'sleep-now';
 
@@ -65,101 +66,133 @@ export function CalculatorCard({
 
   return (
     <section className="flex flex-col items-center gap-8 px-6 py-5 md:px-16 w-full">
-      <div className="flex flex-col gap-7 p-8 rounded-3xl bg-[rgba(19,17,36,0.5)] border border-(--sc-border) shadow-[0_20px_60px_-10px_rgba(124,106,232,0.13)] w-full max-w-xl backdrop-blur-sm">
+      <motion.div 
+        layout
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+        className="flex flex-col gap-7 p-8 rounded-3xl bg-[rgba(19,17,36,0.5)] border border-(--sc-border) shadow-[0_20px_60px_-10px_rgba(124,106,232,0.13)] w-full max-w-xl backdrop-blur-sm overflow-hidden"
+      >
         {/* Tabs */}
-        <div className="flex gap-1 p-1 rounded-2xl bg-(--sc-input-bg) w-full">
+        <div className="flex gap-1 p-1 rounded-2xl bg-(--sc-input-bg) w-full relative">
           <button
             onClick={() => handleTabChange('wake-up')}
-            className={`flex items-center justify-center gap-2 flex-1 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
+            className={`flex items-center justify-center gap-2 flex-1 py-3 rounded-xl text-sm font-semibold transition-colors duration-200 cursor-pointer relative z-10 ${
               activeTab === 'wake-up'
-                ? 'bg-(--sc-primary) text-white'
+                ? 'text-white'
                 : 'text-(--sc-text-secondary) hover:text-(--sc-text)'
             }`}
           >
             <Sunrise className="w-4 h-4" />
             Wake Up At
+            {activeTab === 'wake-up' && (
+              <motion.div
+                layoutId="activeTab"
+                className="absolute inset-0 bg-(--sc-primary) rounded-xl z-[-1]"
+                transition={{ type: "spring", stiffness: 350, damping: 30 }}
+              />
+            )}
           </button>
           <button
             onClick={() => handleTabChange('sleep-now')}
-            className={`flex items-center justify-center gap-2 flex-1 py-3 rounded-xl text-sm font-medium transition-all cursor-pointer ${
+            className={`flex items-center justify-center gap-2 flex-1 py-3 rounded-xl text-sm font-medium transition-colors duration-200 cursor-pointer relative z-10 ${
               activeTab === 'sleep-now'
-                ? 'bg-(--sc-primary) text-white'
+                ? 'text-white'
                 : 'text-(--sc-text-secondary) hover:text-(--sc-text)'
             }`}
           >
             <MoonStar className="w-4 h-4" />
             Sleep Now
+            {activeTab === 'sleep-now' && (
+              <motion.div
+                layoutId="activeTab"
+                className="absolute inset-0 bg-(--sc-primary) rounded-xl z-[-1]"
+                transition={{ type: "spring", stiffness: 350, damping: 30 }}
+              />
+            )}
           </button>
         </div>
 
-        {/* Time input (only for wake-up mode) */}
-        {activeTab === 'wake-up' && (
-          <div className="flex flex-col items-center gap-3 w-full">
-            <span className="text-sm text-(--sc-text-secondary)">I want to wake up at</span>
-            <div className="flex items-center gap-3">
-              {/* Hour */}
-              <button
-                onClick={() => cycleHour(1)}
-                onWheel={(e) => cycleHour(e.deltaY > 0 ? -1 : 1)}
-                className="flex items-center justify-center w-24 h-20 rounded-2xl bg-(--sc-input-bg) border border-(--sc-border) cursor-pointer hover:border-(--sc-primary) transition-colors"
-              >
-                <span className="font-['Playfair_Display'] text-4xl font-semibold italic text-(--sc-text)">
-                  {hour.toString().padStart(2, '0')}
-                </span>
-              </button>
+        {/* Form content mapping */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, x: activeTab === 'wake-up' ? -10 : 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: activeTab === 'wake-up' ? 10 : -10 }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+            className="flex flex-col gap-7 w-full"
+          >
+            {/* Time input (only for wake-up mode) */}
+            {activeTab === 'wake-up' && (
+              <div className="flex flex-col items-center gap-3 w-full">
+                <span className="text-sm text-(--sc-text-secondary)">I want to wake up at</span>
+                <div className="flex items-center gap-3">
+                  {/* Hour */}
+                  <button
+                    onClick={() => cycleHour(1)}
+                    onWheel={(e) => cycleHour(e.deltaY > 0 ? -1 : 1)}
+                    className="flex items-center justify-center w-24 h-20 rounded-2xl bg-(--sc-input-bg) border border-(--sc-border) cursor-pointer hover:border-(--sc-primary) transition-colors"
+                  >
+                    <span className="font-['Playfair_Display'] text-4xl font-semibold italic text-(--sc-text)">
+                      {hour.toString().padStart(2, '0')}
+                    </span>
+                  </button>
 
-              {/* Colon */}
-              <span className="font-['Playfair_Display'] text-4xl font-semibold italic text-(--sc-primary)">
-                :
-              </span>
+                  {/* Colon */}
+                  <span className="font-['Playfair_Display'] text-4xl font-semibold italic text-(--sc-primary)">
+                    :
+                  </span>
 
-              {/* Minute */}
-              <button
-                onClick={() => cycleMinute(1)}
-                onWheel={(e) => cycleMinute(e.deltaY > 0 ? -1 : 1)}
-                className="flex items-center justify-center w-24 h-20 rounded-2xl bg-(--sc-input-bg) border border-(--sc-border) cursor-pointer hover:border-(--sc-primary) transition-colors"
-              >
-                <span className="font-['Playfair_Display'] text-4xl font-semibold italic text-(--sc-text)">
-                  {minute.toString().padStart(2, '0')}
-                </span>
-              </button>
+                  {/* Minute */}
+                  <button
+                    onClick={() => cycleMinute(1)}
+                    onWheel={(e) => cycleMinute(e.deltaY > 0 ? -1 : 1)}
+                    className="flex items-center justify-center w-24 h-20 rounded-2xl bg-(--sc-input-bg) border border-(--sc-border) cursor-pointer hover:border-(--sc-primary) transition-colors"
+                  >
+                    <span className="font-['Playfair_Display'] text-4xl font-semibold italic text-(--sc-text)">
+                      {minute.toString().padStart(2, '0')}
+                    </span>
+                  </button>
 
-              {/* AM/PM */}
-              <button
-                onClick={() => setPeriod(p => p === 'AM' ? 'PM' : 'AM')}
-                className="flex flex-col items-center justify-center gap-0.5 w-14 h-20 rounded-2xl bg-(--sc-input-bg) border border-(--sc-border) cursor-pointer hover:border-(--sc-primary) transition-colors"
-              >
-                <span className={`text-sm font-semibold ${period === 'AM' ? 'text-(--sc-primary)' : 'text-(--sc-text-muted)'}`}>
-                  AM
-                </span>
-                <span className={`text-sm ${period === 'PM' ? 'font-semibold text-(--sc-primary)' : 'text-(--sc-text-muted)'}`}>
-                  PM
-                </span>
-              </button>
-            </div>
-          </div>
-        )}
+                  {/* AM/PM */}
+                  <button
+                    onClick={() => setPeriod(p => p === 'AM' ? 'PM' : 'AM')}
+                    className="flex flex-col items-center justify-center gap-0.5 w-14 h-20 rounded-2xl bg-(--sc-input-bg) border border-(--sc-border) cursor-pointer hover:border-(--sc-primary) transition-colors"
+                  >
+                    <span className={`text-sm font-semibold ${period === 'AM' ? 'text-(--sc-primary)' : 'text-(--sc-text-muted)'}`}>
+                      AM
+                    </span>
+                    <span className={`text-sm ${period === 'PM' ? 'font-semibold text-(--sc-primary)' : 'text-(--sc-text-muted)'}`}>
+                      PM
+                    </span>
+                  </button>
+                </div>
+              </div>
+            )}
 
-        {/* Sleep now description */}
-        {activeTab === 'sleep-now' && (
-          <div className="flex flex-col gap-3 w-full">
-            <p className="text-sm text-(--sc-text-secondary)">
-              Going to bed now? We'll calculate the best times to set your alarm.
-            </p>
-          </div>
-        )}
+            {/* Sleep now description */}
+            {activeTab === 'sleep-now' && (
+              <div className="flex flex-col gap-3 w-full">
+                <p className="text-sm text-(--sc-text-secondary)">
+                  Going to bed now? We'll calculate the best times to set your alarm.
+                </p>
+              </div>
+            )}
 
-        {/* Calculate button */}
-        <button
-          onClick={handleCalculate}
-          className="flex items-center justify-center gap-2.5 w-full py-4 rounded-2xl bg-(--sc-primary) text-white font-semibold transition-all hover:brightness-110 active:scale-[0.98] cursor-pointer"
-        >
-          <Calculator className="w-5 h-5" />
-          {activeTab === 'wake-up' ? 'Calculate Sleep Times' : 'Calculate Wake Times'}
-        </button>
+            {/* Calculate button */}
+            <button
+              onClick={handleCalculate}
+              className="flex items-center justify-center gap-2.5 w-full py-4 rounded-2xl bg-(--sc-primary) text-white font-semibold transition-all hover:brightness-110 active:scale-[0.98] cursor-pointer shadow-lg shadow-indigo-500/10"
+            >
+              <Calculator className="w-5 h-5" />
+              {activeTab === 'wake-up' ? 'Calculate Sleep Times' : 'Calculate Wake Times'}
+            </button>
+          </motion.div>
+        </AnimatePresence>
 
         {/* Sleep onset setting */}
-        <div className="flex items-center justify-center gap-2 w-full">
+        <div className="flex items-center justify-center gap-2 w-full pt-2">
           <Timer className="w-3.5 h-3.5 text-(--sc-text-muted)" />
           <span className="text-sm text-(--sc-text-muted)">Time to fall asleep:</span>
           {editingOnset ? (
@@ -184,7 +217,7 @@ export function CalculatorCard({
             <Pencil className="w-3 h-3" />
           </button>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

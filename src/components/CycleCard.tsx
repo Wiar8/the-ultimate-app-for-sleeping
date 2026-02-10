@@ -1,3 +1,5 @@
+import { motion } from 'motion/react';
+
 interface CycleCardProps {
   time: string;
   cycles: number;
@@ -11,6 +13,16 @@ const CYCLE_META: Record<number, { label: string; labelColor: string; barColor: 
   3: { label: 'Minimum', labelColor: 'text-[var(--sc-text-muted)]', barColor: 'bg-[var(--sc-text-muted)]', timeColor: 'text-[var(--sc-text-secondary)]', barWidth: 'w-[50%]' },
 };
 
+const itemVariants = {
+  hidden: { opacity: 0, scale: 0.9, y: 10 },
+  visible: { 
+    opacity: 1, 
+    scale: 1, 
+    y: 0, 
+    transition: { type: "spring", stiffness: 200, damping: 20 } as const 
+  }
+};
+
 export function CycleCard({ time, cycles, isRecommended }: CycleCardProps) {
   const meta = CYCLE_META[cycles] ?? CYCLE_META[4];
   const totalMinutes = cycles * 90;
@@ -18,8 +30,9 @@ export function CycleCard({ time, cycles, isRecommended }: CycleCardProps) {
   const minutes = totalMinutes % 60;
 
   return (
-    <div
-      className={`flex flex-col items-center gap-4 p-5 rounded-3xl w-full min-w-40 ${
+    <motion.div
+      variants={itemVariants}
+      className={`flex flex-col items-center gap-4 p-5 rounded-3xl w-full min-w-40 transition-shadow duration-300 hover:shadow-[0_10px_40px_-5px_rgba(124,106,232,0.15)] ${
         isRecommended
           ? 'bg-[rgba(124,106,232,0.09)] border border-(--sc-primary) shadow-[0_8px_30px_-5px_rgba(124,106,232,0.19)]'
           : 'bg-(--sc-surface)/80 border border-(--sc-border)]'
@@ -55,6 +68,6 @@ export function CycleCard({ time, cycles, isRecommended }: CycleCardProps) {
       <div className="w-full h-1 rounded-full bg-(--sc-input-bg)">
         <div className={`h-full rounded-full ${meta.barColor} ${meta.barWidth}`} />
       </div>
-    </div>
+    </motion.div>
   );
 }
