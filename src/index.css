@@ -3,10 +3,26 @@
 @layer base {
   :root {
     color-scheme: dark;
+    --sc-bg: #0B0A1A;
+    --sc-surface: #131124;
+    --sc-surface-dark: #1A182E;
+    --sc-primary: #7C6AE8;
+    --sc-primary-light: #A78BFA;
+    --sc-text: #F0EEF6;
+    --sc-text-secondary: #888799;
+    --sc-text-muted: #4A4960;
+    --sc-border: #2B283D;
+    --sc-input-bg: #0B0A1A;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--sc-bg);
+    color: var(--sc-text);
   }
 }
 
-@keyframes slide-in-bottom {
+@keyframes fade-in-up {
   from {
     transform: translateY(1rem);
     opacity: 0;
@@ -17,6 +33,15 @@
   }
 }
 
-.animate-in {
-  animation: slide-in-bottom 0.5s ease-out forwards;
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out forwards;
+}
+
+.animate-twinkle {
+  animation: twinkle 3s ease-in-out infinite;
 }
